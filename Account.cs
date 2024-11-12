@@ -1,14 +1,22 @@
-class Account
+public abstract class Account
 {
-    
-
+   public string username{get;set;}
+   public string passwordHash{get;set;}
 }
 
-class Admin : Account
+public class AdminAccount : Account
 {
-
+    public AdminAccount(string username, string passwordHash)
+    {
+        this.username = username;
+        this.passwordHash = passwordHash;
+    }
 }
-class User : Account
+public class UserAccount : Account
 {
-
+    public UserAccount(string username, string passwordHash)
+    {
+        this.username = username;
+        this.passwordHash = passwordHash;
+    }
 }
