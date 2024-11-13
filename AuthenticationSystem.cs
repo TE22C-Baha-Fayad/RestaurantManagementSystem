@@ -141,13 +141,16 @@ public class Register : AuthenticationSystem
 }
 public class Login : AuthenticationSystem
 {
-    public Account TryFindAccount(List<Account> accountList)
+    public static Account TryFindAccount(List<Account> accountList)
     {
         string inputUsername = HandledAskForUserName();
         string inputPassword = HandledReadPasswordToHash();
 
-
-
+        if (accountList.Count < 1)
+        {
+            Console.WriteLine("Account not found, username not valid.");
+            return null;
+        }
         for (int i = 0; i < accountList.Count; i++)
         {
             if (accountList[i].username == inputUsername)
@@ -174,7 +177,7 @@ public class Login : AuthenticationSystem
             }
             if (i == accountList.Count - 1)
             {
-                Console.WriteLine("Username not found. ");
+                Console.WriteLine("Account not found, username not valid.");
             }
 
         }

@@ -1,5 +1,6 @@
 ﻿
 
+using System.Diagnostics;
 using System.Net.WebSockets;
 
 class Program
@@ -70,7 +71,97 @@ class Program
     }
     static void LoginPage()
     {
+        const int innitialCursorY = 1;
+        int lastcursorYPosition = innitialCursorY;
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("What type of account would you like to Login As?");
+            Console.WriteLine("  1.User Account - Recommended for users");
+            Console.WriteLine("  2.Admin Account - For Restaurant staff only.");
+            Console.WriteLine("  3.Return - Returns back to main menu.");
 
+            Console.SetCursorPosition(0, lastcursorYPosition);
+            string navigationCharacter = "=>";
+            Console.Write(navigationCharacter);
+
+
+            ConsoleKey key = Console.ReadKey().Key;
+
+            if (key == ConsoleKey.UpArrow && lastcursorYPosition > innitialCursorY)
+            {
+                lastcursorYPosition--;
+
+            }
+            else if (key == ConsoleKey.DownArrow && lastcursorYPosition < innitialCursorY + 2)
+            {
+                lastcursorYPosition++;
+
+            }
+            else if (key == ConsoleKey.Enter)
+            {
+                int currnetCursorY = Console.GetCursorPosition().Top;
+
+                if (currnetCursorY == innitialCursorY)
+                {
+                    LoginAccount(false);
+                }
+                else if (currnetCursorY == innitialCursorY + 1)
+                {
+                    LoginAccount(true);
+                }
+                else if (currnetCursorY == innitialCursorY + 2)
+                {
+                    return;
+                }
+
+            }
+        }
+        static void LoginAccount(bool isAdmin)
+        {
+            while (true)
+            {
+                Console.Clear();
+                List<Account> accounts;
+                if (isAdmin)
+                {
+                    accounts = Data.adminAccounts.ToList<Account>();
+                }
+                else
+                {
+                    accounts = Data.userAccounts.ToList<Account>();
+                }
+                Account account = Login.TryFindAccount(accounts);
+                if (account != null)
+                {
+                    // TODO: create my pages
+                    Console.ReadKey();
+                }
+                else
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Would you like to try again? answer with y/n");
+                        ConsoleKey answer = Console.ReadKey().Key;
+                        if (answer == ConsoleKey.Y)
+                        {
+                            break;
+                        }
+                        else if (answer == ConsoleKey.N)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Answer not valid!");
+                            Console.WriteLine("press any key to continue...");
+                            Console.ReadKey();
+                        }
+                    }
+
+                }
+            }
+        }
     }
     static void RegisterPage()
     {
