@@ -102,8 +102,49 @@ public class Register : AuthenticationSystem
 
         while (true)
         {
+            string username;
+            while (true)
+            {
 
-            string username = HandledAskForUserName();
+                username = HandledAskForUserName();
+                if (isAdmin)
+                {
+                    bool doneChecking = false;
+                    if (doneChecking)
+                        break;
+
+                    for (int i = 0; i < Data.adminAccounts.Count; i++)
+                    {
+                        if (Data.adminAccounts[i].username == username)
+                        {
+                            Console.WriteLine("This Username already exists! Please try again with another username.");
+                        }
+                        else if (i == Data.adminAccounts.Count - 1)
+                        {
+                            doneChecking = true;
+                        }
+                    }
+
+                }
+                else
+                {
+                    bool doneChecking = false;
+                    if (doneChecking)
+                        break;
+
+                    for (int i = 0; i < Data.adminAccounts.Count; i++)
+                    {
+                        if (Data.adminAccounts[i].username == username)
+                        {
+                            Console.WriteLine("This Username already exists! Please try again with another username.");
+                        }
+                        else if (i == Data.adminAccounts.Count - 1)
+                        {
+                            doneChecking = true;
+                        }
+                    }
+                }
+            }
             string passwordHash = HandledReadPasswordToHash();
 
             // Confirm the password

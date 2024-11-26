@@ -18,7 +18,7 @@ class Program
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("Welcome to Royal Restaurant!");
+            Console.WriteLine("Welcome to the krusty krab Restaurant!");
             Console.WriteLine("Please navigate with (Up) arrow and (Down) arrow and confirm with Enter.");
             Console.WriteLine();
             Console.WriteLine("What would you like to do?");
@@ -117,7 +117,7 @@ class Program
 
             }
         }
-        static void LoginAccount(bool isAdmin)
+        static Account LoginAccount(bool isAdmin)
         {
             while (true)
             {
@@ -134,8 +134,7 @@ class Program
                 Account account = Login.TryFindAccount(accounts);
                 if (account != null)
                 {
-                    // TODO: create my pages
-                    Console.ReadKey();
+                    return account;
                 }
                 else
                 {
@@ -149,7 +148,7 @@ class Program
                         }
                         else if (answer == ConsoleKey.N)
                         {
-                            return;
+                            return null;
                         }
                         else
                         {
@@ -201,10 +200,12 @@ class Program
                 if (currnetCursorY == innitialCursorY)
                 {
                     Register.RegisterAccount(false);
+                    break;
                 }
                 else if (currnetCursorY == innitialCursorY + 1)
                 {
                     Register.RegisterAccount(true);
+                    break;
                 }
                 else if (currnetCursorY == innitialCursorY + 2)
                 {
