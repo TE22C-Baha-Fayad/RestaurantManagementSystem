@@ -1,13 +1,13 @@
 ﻿
-
-using System.Diagnostics;
-using System.Net.WebSockets;
+using System.Collections;
+using System.Runtime.Intrinsics.Arm;
 
 class Program
 {
     static void Main(string[] args)
     {
         MainMenu();
+
 
     }
     static void MainMenu()
@@ -69,6 +69,66 @@ class Program
         Console.WriteLine("See you next time!");
         return;
     }
+    static void MyPages(Account account)
+    {
+        if (account.GetType() == typeof(AdminAccount))
+        {
+            
+        }
+        else
+        {
+        
+            const int innitialCursorY = 1;
+            int lastcursorYPosition = innitialCursorY;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Welcome {account.username} to MyPages, what would you like to do?");
+                Console.WriteLine("  1.Order Food - directs to Food menu.");
+                Console.WriteLine("  2.See Orders - See ordered food.");
+                Console.WriteLine("  3.Return - Returns back to main menu.");
+
+                Console.SetCursorPosition(0, lastcursorYPosition);
+                string navigationCharacter = "=>";
+                Console.Write(navigationCharacter);
+
+
+                ConsoleKey key = Console.ReadKey().Key;
+
+                if (key == ConsoleKey.UpArrow && lastcursorYPosition > innitialCursorY)
+                {
+                    lastcursorYPosition--;
+
+                }
+                else if (key == ConsoleKey.DownArrow && lastcursorYPosition < innitialCursorY + 2)
+                {
+                    lastcursorYPosition++;
+
+                }
+                else if (key == ConsoleKey.Enter)
+                {
+                    int currnetCursorY = Console.GetCursorPosition().Top;
+
+                    if (currnetCursorY == innitialCursorY)
+                    {
+                        LoginAccount(false);
+                        break;
+                    }
+                    else if (currnetCursorY == innitialCursorY + 1)
+                    {
+                        LoginAccount(true);
+                        break;
+                    }
+                    else if (currnetCursorY == innitialCursorY + 2)
+                    {
+                        return;
+                    }
+
+                }
+            }
+
+        }
+    }
     static void LoginPage()
     {
         const int innitialCursorY = 1;
@@ -105,10 +165,12 @@ class Program
                 if (currnetCursorY == innitialCursorY)
                 {
                     LoginAccount(false);
+                    break;
                 }
                 else if (currnetCursorY == innitialCursorY + 1)
                 {
                     LoginAccount(true);
+                    break;
                 }
                 else if (currnetCursorY == innitialCursorY + 2)
                 {
@@ -117,51 +179,52 @@ class Program
 
             }
         }
-        static Account LoginAccount(bool isAdmin)
+    }
+    static Account LoginAccount(bool isAdmin)
+    {
+        while (true)
         {
-            while (true)
+            Console.Clear();
+            List<Account> accounts;
+            if (isAdmin)
             {
-                Console.Clear();
-                List<Account> accounts;
-                if (isAdmin)
+                accounts = Data.adminAccounts.ToList<Account>();
+            }
+            else
+            {
+                accounts = Data.userAccounts.ToList<Account>();
+            }
+            Account account = Login.TryFindAccount(accounts);
+            if (account != null)
+            {
+                return account;
+            }
+            else
+            {
+                while (true)
                 {
-                    accounts = Data.adminAccounts.ToList<Account>();
-                }
-                else
-                {
-                    accounts = Data.userAccounts.ToList<Account>();
-                }
-                Account account = Login.TryFindAccount(accounts);
-                if (account != null)
-                {
-                    return account;
-                }
-                else
-                {
-                    while (true)
+                    Console.WriteLine("Would you like to try again? answer with y/n");
+                    ConsoleKey answer = Console.ReadKey().Key;
+                    if (answer == ConsoleKey.Y)
                     {
-                        Console.WriteLine("Would you like to try again? answer with y/n");
-                        ConsoleKey answer = Console.ReadKey().Key;
-                        if (answer == ConsoleKey.Y)
-                        {
-                            break;
-                        }
-                        else if (answer == ConsoleKey.N)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Answer not valid!");
-                            Console.WriteLine("press any key to continue...");
-                            Console.ReadKey();
-                        }
+                        break;
                     }
-
+                    else if (answer == ConsoleKey.N)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Answer not valid!");
+                        Console.WriteLine("press any key to continue...");
+                        Console.ReadKey();
+                    }
                 }
+
             }
         }
     }
+
     static void RegisterPage()
     {
 
